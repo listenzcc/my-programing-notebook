@@ -107,6 +107,7 @@ def parse_md_file(path: Path, df: pd.DataFrame):
 
             full_content_folder = full_content_root.joinpath(p.name)
             shutil.copytree(p, full_content_folder, dirs_exist_ok=True)
+            logger.debug(f'Copy tree: {p} -> {full_content_folder}')
 
         logger.debug(f'Found folders: n={len(found)}')
 
