@@ -46,10 +46,10 @@ class MyArticle(object):
     date = ''
     layout = 'post'
     categories = 'default'
+    toc = 'true'
 
     def __init__(self):
         self.date = datetime.strftime(datetime.now(), '%Y-%m-%d')
-        pass
 
     def update(self, line: str):
         line = line.strip()
@@ -72,8 +72,22 @@ class MyArticle(object):
             title=self.title,
             date=self.date,
             layout=self.layout,
-            categories=self.categories
+            categories=self.categories,
+            toc=self.toc
         ))
+
+    def convert_to_header(self):
+        return [
+            '---\n',
+            f'layout: {self.layout}\n',
+            f'title: "{self.title}"\n',
+            f'date: {self.date}\n',
+            f'categories: {self.categories}\n',
+            f'toc: {self.toc}\n',
+            'author:\n',
+            '- Chuncheng Zhang\n'
+            '---\n\n',
+        ]
 
 
 # def legal_title(title: str):
@@ -114,15 +128,24 @@ def parse_md_file(path: Path, df: pd.DataFrame):
     # --------------------
     # Make the post
     header = []
-    header.extend([
-        '---\n',
-        f'layout: {article.layout}\n',
-        f'title: "{article.title}"\n',
-        f'date: {article.date}\n',
-        f'categories: {article.categories}\n',
-        '---\n\n',
-    ])
+    header.extend(article.convert_to_header())
     logger.debug(f'Generate header:{header}')
+
+    # --------------------
+    # Remove the header before --- firstly occurs
+    for j, line in enumerate(lines[:20]):
+        if line.startswith('---'):
+            logger.debug(f'Remove header: {lines[:j+1]}')
+            lines = lines[j+1:]
+            break
+
+    # --------------------
+    # Remove [toc] marker
+    for j, line in enumerate(lines[:20]):
+        if line.startswith('[toc]'):
+            lines.pop(j)
+            logger.debug(f'Removed [toc]: {j}')
+            break
 
     # --------------------
     # Write the article to the post

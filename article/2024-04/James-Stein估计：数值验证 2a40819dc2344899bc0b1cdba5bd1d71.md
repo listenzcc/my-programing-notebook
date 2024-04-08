@@ -12,6 +12,8 @@ Keywords: Statistic, Estimation, James-Stein, Python
 
 [toc]
 
+---
+
 ## JS与MLE方法的风险计算
 
 前文已经说明，MLE（最大似然估计）和JS（James-Stein估计）方法对$n$维多元正态分布的均值$\mu$进行估计

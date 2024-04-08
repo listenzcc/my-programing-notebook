@@ -18,6 +18,7 @@ Functions:
 
 # %% ---- 2024-04-05 ------------------------
 # Requirements and constants
+import os
 from loguru import logger
 from pathlib import Path
 
@@ -33,7 +34,7 @@ logger.add('log/my-parttime-writing.log', rotation='5 MB')
 root = Path(__file__).parent.parent.parent
 article_root = root.joinpath('article')
 
-post_root = root.joinpath('myblog/_posts')
+post_root = Path(os.environ['OneDriveConsumer'], 'Laptop/minima/_posts')
 full_content_root = post_root.parent.joinpath('full-content')
 
 
